@@ -3,214 +3,152 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Founderhood Culture Quiz</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <title>Founderhood Snake Game</title>
   <style>
     body {
       margin: 0;
-      font-family: 'Roboto', sans-serif;
+      font-family: 'Arial', sans-serif;
       background: linear-gradient(to bottom right, #e3f2fd, #e8eaf6);
-      color: #1b1f3b;
-      min-height: 100vh;
+      color: #0d47a1;
       display: flex;
       flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      height: 100vh;
     }
 
     header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 15px 20px;
+      width: 100%;
+      padding: 15px 30px;
       background-color: #ffffff;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
 
     .logo-bar {
       display: flex;
-      align-items: center;
       gap: 15px;
     }
 
     .logo-bar img {
       height: 50px;
-      border-radius: 12px;
-    }
-
-    .banner-img {
-      height: 60px;
       border-radius: 10px;
     }
 
-    .title-block {
-      text-align: center;
-      padding: 30px 20px 10px;
+    .game-area {
+      margin-top: 20px;
+      position: relative;
     }
 
-    .title-block h1 {
-      font-size: 2.5rem;
-      color: #0d47a1;
-      margin-bottom: 0.5rem;
-    }
-
-    .title-block p {
-      font-size: 1.1rem;
-      color: #333;
-    }
-
-    .quiz-container {
+    canvas {
+      border: 4px solid #0d47a1;
       background-color: #ffffff;
-      margin: 20px auto;
-      padding: 30px;
-      border-radius: 15px;
-      width: 90%;
-      max-width: 800px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-      animation: fadeIn 0.8s ease;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .question {
-      font-size: 1.4rem;
-      margin-bottom: 20px;
-    }
-
-    .options button {
-      display: block;
-      width: 100%;
-      margin: 10px 0;
-      padding: 12px;
-      font-size: 1rem;
-      background-color: #0d47a1;
-      color: #fff;
-      border: none;
+    .info-box {
+      margin-top: 15px;
+      padding: 10px 20px;
       border-radius: 8px;
-      cursor: pointer;
-      transition: background 0.3s, transform 0.2s;
-    }
-
-    .options button:hover {
-      background-color: #1565c0;
-      transform: scale(1.02);
-    }
-
-    .result {
-      font-size: 1.3rem;
-      margin-top: 25px;
-      font-weight: bold;
-    }
-
-    footer {
+      background-color: #ffffff;
+      color: #333;
+      max-width: 500px;
       text-align: center;
-      margin: 40px 0;
-      font-size: 0.9rem;
-      color: #666;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     }
   </style>
 </head>
 <body>
   <header>
     <div class="logo-bar">
-      <img src="https://media.licdn.com/dms/image/v2/C4E0BAQFYpyjdZ5Og-Q/company-logo_200_200/0/1630645566608/founderhood_logo?e=2147483647&v=beta&t=dSUVH4ozkUgYyR1I6aSamTaBWYR8jhs9DFO2p2PmOsc" >
+      <img src="https://media.licdn.com/dms/image/v2/C4E0BAQFYpyjdZ5Og-Q/company-logo_200_200/0/1630645566608/founderhood_logo?e=2147483647&v=beta&t=dSUVH4ozkUgYyR1I6aSamTaBWYR8jhs9DFO2p2PmOsc" alt="Founderhood Logo">
       <img src="https://image.pitchbook.com/iugZr4vR1Rq7Z6bnLZTdt0JDrV11669897160015_200x200" alt="Pitchbook Logo">
     </div>
-    <img class="banner-img" src="https://thefounderhood.com/img/branding/facebook_open%20graph_founderhood.png" alt="Founderhood Banner">
+    <img src="https://thefounderhood.com/img/branding/facebook_open%20graph_founderhood.png" alt="Founderhood Banner" style="height: 60px; border-radius: 10px;">
   </header>
 
-  <div class="title-block">
-    <h1>Founderhood Culture Quiz</h1>
-    <p>Can you master the values and culture behind the startup accelerator world?</p>
+  <div class="game-area">
+    <canvas id="gameCanvas" width="400" height="400"></canvas>
+    <div class="info-box" id="infoBox">🎯 Use arrow keys to collect coins and reveal facts about Founderhood!</div>
   </div>
-
-  <div class="quiz-container">
-    <div class="question" id="question">Loading question...</div>
-    <div class="options" id="options"></div>
-    <div class="result" id="result"></div>
-  </div>
-
-  <footer>
-    Learn and play — discover Founderhood through this fun and informative quiz.
-  </footer>
 
   <script>
-    const quizData = [
-      {
-        question: "What does Founderhood mainly focus on?",
-        options: ["Food Tech", "Startup Incubation Programs", "Freelance Jobs", "Online Learning"],
-        correct: 1
-      },
-      {
-        question: "True or False: Founderhood supports only London startups.",
-        options: ["True", "False"],
-        correct: 1
-      },
-      {
-        question: "Which is a feature in the Founderhood platform?",
-        options: ["Music streaming", "Startup tracking and reporting", "Online delivery", "Game hosting"],
-        correct: 1
-      },
-      {
-        question: "Which company is listed as a Founderhood partner?",
-        options: ["NASA", "Deloitte", "Apple", "Netflix"],
-        correct: 1
-      },
-      {
-        question: "What kind of tools does Founderhood offer?",
-        options: ["Team building games", "Accelerator management dashboards", "Video editing software", "Travel planners"],
-        correct: 1
-      },
-      {
-        question: "Founderhood allows organizers to...",
-        options: ["Stream movies", "Track alumni performance", "Write novels", "Host TikTok contests"],
-        correct: 1
-      },
-      {
-        question: "How does Founderhood help startups grow?",
-        options: ["By giving them viral marketing", "By providing structured programs and mentorship", "By hosting sports events", "By building games"],
-        correct: 1
-      },
-      {
-        question: "What's the vision of Founderhood?",
-        options: ["Create a music community", "Empower founders worldwide", "Sell startup swag", "Develop AI tools"],
-        correct: 1
-      }
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
+    const infoBox = document.getElementById("infoBox");
+
+    const gridSize = 20;
+    let snake = [{ x: 200, y: 200 }];
+    let direction = "right";
+    let food = { x: 100, y: 100 };
+    let facts = [
+      "Founderhood helps incubators manage startups efficiently!",
+      "Track your program KPIs using the Founderhood platform.",
+      "Founderhood supports in-person, hybrid, and remote programs.",
+      "Used by Deloitte, Chivas Ventures, and Startup Greece.",
+      "Founderhood connects innovators worldwide.",
+      "Application and evaluation tools are included.",
+      "Alumni network tracking made easy.",
+      "Founderhood is built to scale startup ecosystems."
     ];
+    let currentFact = 0;
 
-    let currentQuestion = 0;
-    let score = 0;
-
-    function loadQuestion() {
-      const q = quizData[currentQuestion];
-      document.getElementById("question").textContent = q.question;
-      const optionsDiv = document.getElementById("options");
-      optionsDiv.innerHTML = "";
-
-      q.options.forEach((option, index) => {
-        const btn = document.createElement("button");
-        btn.textContent = option;
-        btn.onclick = () => checkAnswer(index);
-        optionsDiv.appendChild(btn);
-      });
+    function drawSnake() {
+      ctx.fillStyle = "#0d47a1";
+      snake.forEach(part => ctx.fillRect(part.x, part.y, gridSize, gridSize));
     }
 
-    function checkAnswer(selected) {
-      const isCorrect = selected === quizData[currentQuestion].correct;
-      if (isCorrect) score++;
-      currentQuestion++;
-      if (currentQuestion < quizData.length) {
-        loadQuestion();
+    function drawFood() {
+      ctx.fillStyle = "#f9a825";
+      ctx.beginPath();
+      ctx.arc(food.x + gridSize/2, food.y + gridSize/2, gridSize/2 - 2, 0, 2 * Math.PI);
+      ctx.fill();
+    }
+
+    function moveSnake() {
+      let head = { ...snake[0] };
+      if (direction === "right") head.x += gridSize;
+      else if (direction === "left") head.x -= gridSize;
+      else if (direction === "up") head.y -= gridSize;
+      else if (direction === "down") head.y += gridSize;
+
+      snake.unshift(head);
+
+      if (head.x === food.x && head.y === food.y) {
+        currentFact = (currentFact + 1) % facts.length;
+        infoBox.textContent = facts[currentFact];
+        food.x = Math.floor(Math.random() * (canvas.width / gridSize)) * gridSize;
+        food.y = Math.floor(Math.random() * (canvas.height / gridSize)) * gridSize;
       } else {
-        const msg = score > 6 ? "🔥 Amazing! You really get Founderhood!" : "👍 Good job! Now you know more!";
-        document.getElementById("question").textContent = "🎉 Quiz Finished!";
-        document.getElementById("options").innerHTML = "";
-        document.getElementById("result").textContent = `${msg} You scored ${score} out of ${quizData.length}.`;
+        snake.pop();
       }
     }
 
-    window.onload = loadQuestion;
+    function checkCollision() {
+      const head = snake[0];
+      if (head.x < 0 || head.y < 0 || head.x >= canvas.width || head.y >= canvas.height || snake.slice(1).some(part => part.x === head.x && part.y === head.y)) {
+        alert("Game Over! Reload the page to play again.");
+        document.location.reload();
+      }
+    }
+
+    function update() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      drawFood();
+      moveSnake();
+      drawSnake();
+      checkCollision();
+    }
+
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "ArrowUp" && direction !== "down") direction = "up";
+      else if (e.key === "ArrowDown" && direction !== "up") direction = "down";
+      else if (e.key === "ArrowLeft" && direction !== "right") direction = "left";
+      else if (e.key === "ArrowRight" && direction !== "left") direction = "right";
+    });
+
+    setInterval(update, 150);
   </script>
 </body>
 </html>
