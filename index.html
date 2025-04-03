@@ -11,26 +11,37 @@
       font-family: 'Roboto', sans-serif;
       background: linear-gradient(135deg, #eef2f7, #d6e4f0);
       color: #1b1f3b;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 30px 20px;
       min-height: 100vh;
     }
 
     header {
-      text-align: center;
-      margin-bottom: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px;
+      background-color: white;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
     }
 
-    header img {
-      width: 100px;
+    .logo-left {
+      height: 50px;
       border-radius: 50%;
     }
 
-    h1 {
+    .banner-right {
+      height: 60px;
+      border-radius: 12px;
+    }
+
+    .title-block {
+      text-align: center;
+      margin: 20px auto;
+    }
+
+    .title-block h1 {
       color: #0d47a1;
       font-size: 2.2rem;
+      margin-bottom: 10px;
     }
 
     .quiz-container {
@@ -38,13 +49,14 @@
       padding: 30px;
       border-radius: 20px;
       box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-      width: 100%;
-      max-width: 600px;
+      width: 90%;
+      max-width: 700px;
+      margin: auto;
       text-align: center;
     }
 
     .question {
-      font-size: 1.3rem;
+      font-size: 1.4rem;
       margin-bottom: 20px;
     }
 
@@ -59,21 +71,23 @@
       border-radius: 10px;
       font-size: 1rem;
       cursor: pointer;
-      transition: background 0.3s;
+      transition: all 0.3s;
     }
 
     .options button:hover {
       background-color: #1565c0;
+      transform: scale(1.02);
     }
 
     .result {
-      font-size: 1.2rem;
+      font-size: 1.3rem;
       font-weight: bold;
       margin-top: 20px;
     }
 
     footer {
-      margin-top: 40px;
+      margin: 40px auto;
+      text-align: center;
       font-size: 0.9rem;
       color: #666;
     }
@@ -81,10 +95,14 @@
 </head>
 <body>
   <header>
-    <img src="https://media.licdn.com/dms/image/v2/C4E0BAQFYpyjdZ5Og-Q/company-logo_200_200/0/1630645566608/founderhood_logo?e=2147483647&v=beta&t=dSUVH4ozkUgYyR1I6aSamTaBWYR8jhs9DFO2p2PmOsc" alt="Founderhood Logo" />
-    <h1>Founderhood Culture Quiz</h1>
-    <p>Do you know what makes Founderhood thrive?</p>
+    <img class="logo-left" src="https://media.licdn.com/dms/image/v2/C4E0BAQFYpyjdZ5Og-Q/company-logo_200_200/0/1630645566608/founderhood_logo?e=2147483647&v=beta&t=dSUVH4ozkUgYyR1I6aSamTaBWYR8jhs9DFO2p2PmOsc" alt="Founderhood Icon" />
+    <img class="banner-right" src="https://thefounderhood.com/img/branding/facebook_open%20graph_founderhood.png" alt="Founderhood Banner" />
   </header>
+
+  <div class="title-block">
+    <h1>Founderhood Culture Quiz</h1>
+    <p>Test your knowledge of the values, vision, and vibe of Founderhood 🚀</p>
+  </div>
 
   <div class="quiz-container">
     <div class="question" id="question">Loading...</div>
@@ -93,7 +111,7 @@
   </div>
 
   <footer>
-    Inspired by Founderhood’s mission to empower startup ecosystems 🌱
+    This quiz is unofficial and inspired by the mission of Founderhood.
   </footer>
 
   <script>
@@ -110,8 +128,8 @@
       },
       {
         question: "Founderhood helps program managers by...",
-        options: ["Running ads on social media", "Organizing community events only", "Tracking and mentoring startups", "Building mobile apps"],
-        correct: 2
+        options: ["Running ads", "Tracking and mentoring startups", "Selling merchandise", "Building mobile games"],
+        correct: 1
       },
       {
         question: "True or False: Founderhood only supports local startups in London.",
@@ -121,6 +139,31 @@
       {
         question: "What is one of Founderhood's missions?",
         options: ["Accelerate human progress via innovation ecosystems", "Sell tech products", "Train influencers", "Host startup parties"],
+        correct: 0
+      },
+      {
+        question: "What kind of programs does Founderhood help run?",
+        options: ["Fashion Shows", "Startup Accelerators", "Crypto Wallets", "Fitness Bootcamps"],
+        correct: 1
+      },
+      {
+        question: "Founderhood's platform offers tools for...",
+        options: ["Hosting livestream concerts", "Managing and mentoring startups", "Delivering groceries", "Learning to code"],
+        correct: 1
+      },
+      {
+        question: "Which company is NOT mentioned as a Founderhood partner?",
+        options: ["Deloitte", "Startup Greece", "NASA", "Chivas Ventures"],
+        correct: 2
+      },
+      {
+        question: "One benefit of using Founderhood is...",
+        options: ["Getting free gadgets", "Building a startup network", "Creating TikTok content", "Joining gaming tournaments"],
+        correct: 1
+      },
+      {
+        question: "Founderhood is suitable for...",
+        options: ["Running in-person, hybrid, and virtual programs", "Building cars", "Teaching yoga", "Managing food trucks"],
         correct: 0
       }
     ];
@@ -149,9 +192,9 @@
       if (currentQuestion < quizData.length) {
         loadQuestion();
       } else {
-        document.getElementById("question").textContent = "Quiz Complete!";
+        document.getElementById("question").textContent = "🎉 Quiz Complete!";
         document.getElementById("options").innerHTML = "";
-        document.getElementById("result").textContent = `You scored ${score} out of ${quizData.length}! 🚀`;
+        document.getElementById("result").textContent = `You scored ${score} out of ${quizData.length}!`;
       }
     }
 
