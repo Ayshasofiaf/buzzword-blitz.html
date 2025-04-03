@@ -9,73 +9,89 @@
     body {
       margin: 0;
       font-family: 'Roboto', sans-serif;
-      background-color: #f7f9fc;
+      background: linear-gradient(135deg, #eef2f7, #d6e4f0);
       color: #1b1f3b;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      height: 100vh;
+      justify-content: flex-start;
+      min-height: 100vh;
+      padding: 30px 20px;
     }
 
     header {
       text-align: center;
-      margin-bottom: 20px;
+      margin-bottom: 30px;
     }
 
     header img {
-      height: 80px;
+      width: 100%;
+      max-width: 400px;
+      border-radius: 10px;
+      margin-bottom: 20px;
     }
 
     h1 {
       color: #0d47a1;
+      font-size: 2.2rem;
     }
 
     .game-container {
       background-color: white;
       padding: 30px;
-      border-radius: 15px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
       text-align: center;
       width: 90%;
       max-width: 500px;
+      animation: popIn 1s ease-out;
+    }
+
+    @keyframes popIn {
+      0% { transform: scale(0.9); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
     }
 
     .buzzword {
-      font-size: 1.5rem;
-      margin-bottom: 20px;
+      font-size: 1.7rem;
+      margin-bottom: 25px;
       color: #0d47a1;
+      font-weight: bold;
+      min-height: 50px;
     }
 
     button {
-      padding: 12px 20px;
+      padding: 12px 24px;
       background-color: #0d47a1;
       color: white;
       border: none;
-      border-radius: 8px;
+      border-radius: 10px;
       font-size: 1rem;
       cursor: pointer;
+      transition: transform 0.2s ease;
     }
 
     button:hover {
       background-color: #1565c0;
+      transform: scale(1.05);
     }
 
     .score {
-      margin-top: 15px;
+      margin-top: 20px;
       font-weight: bold;
+      font-size: 1.2rem;
     }
   </style>
 </head>
 <body>
   <header>
-    <img src="https://thefounderhood.com/images/logo-white.svg" alt="Founderhood Logo">
+    <img src="https://thefounderhood.com/img/branding/facebook_open%20graph_founderhood.png" alt="Founderhood Logo" />
     <h1>Buzzword Blitz</h1>
-    <p>How fast can you identify Founderhood terms?</p>
+    <p>How fast can you spot Founderhood's hottest terms?</p>
   </header>
 
   <div class="game-container">
-    <div class="buzzword" id="buzzword">Press Start!</div>
+    <div class="buzzword" id="buzzword">Press Start to Begin</div>
     <button onclick="nextBuzzword()">Start</button>
     <div class="score" id="score">Score: 0</div>
   </div>
@@ -93,13 +109,22 @@
 
     function nextBuzzword() {
       index++;
+      const buzzEl = document.getElementById('buzzword');
+      const scoreEl = document.getElementById('score');
+      const button = document.querySelector('button');
+
       if (index < buzzwords.length) {
-        document.getElementById('buzzword').textContent = buzzwords[index];
+        buzzEl.textContent = buzzwords[index];
+        buzzEl.style.animation = 'none';
+        buzzEl.offsetHeight; // restart animation
+        buzzEl.style.animation = 'popIn 0.5s ease';
         score += 10;
-        document.getElementById('score').textContent = `Score: ${score}`;
+        scoreEl.textContent = `Score: ${score}`;
+        button.textContent = "Next";
       } else {
-        document.getElementById('buzzword').textContent = "You're a true Founderhood Pro!";
-        document.querySelector('button').disabled = true;
+        buzzEl.textContent = "You nailed it! You're a Founderhood Master 💥";
+        button.disabled = true;
+        button.style.backgroundColor = '#ccc';
       }
     }
   </script>
