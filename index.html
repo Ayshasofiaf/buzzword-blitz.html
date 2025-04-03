@@ -1,148 +1,106 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Mind Match</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Founderhood Buzzword Blitz</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(135deg, #1e3c72, #2a5298);
-      color: white;
+      margin: 0;
+      font-family: 'Roboto', sans-serif;
+      background-color: #f7f9fc;
+      color: #1b1f3b;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       height: 100vh;
-      margin: 0;
-      overflow: hidden;
     }
-    h1 {
-      margin-bottom: 10px;
-      font-size: 2.5rem;
-    }
-    #score {
+
+    header {
+      text-align: center;
       margin-bottom: 20px;
-      font-size: 1.2rem;
     }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(2, 120px);
-      grid-gap: 20px;
+
+    header img {
+      height: 80px;
     }
-    .btn {
-      width: 120px;
-      height: 120px;
+
+    h1 {
+      color: #0d47a1;
+    }
+
+    .game-container {
+      background-color: white;
+      padding: 30px;
       border-radius: 15px;
-      cursor: pointer;
-      transition: transform 0.1s ease, opacity 0.2s;
-      opacity: 0.8;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+      text-align: center;
+      width: 90%;
+      max-width: 500px;
     }
-    .btn:active {
-      transform: scale(0.95);
-      opacity: 1;
+
+    .buzzword {
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+      color: #0d47a1;
     }
-    .green { background: #2ecc71; }
-    .red { background: #e74c3c; }
-    .blue { background: #3498db; }
-    .yellow { background: #f1c40f; }
-    #start {
-      margin-top: 30px;
-      padding: 10px 25px;
-      font-size: 1rem;
-      background: #ffffff22;
-      border: 1px solid white;
-      border-radius: 5px;
+
+    button {
+      padding: 12px 20px;
+      background-color: #0d47a1;
       color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
       cursor: pointer;
-      transition: 0.2s;
     }
-    #start:hover {
-      background: #ffffff44;
+
+    button:hover {
+      background-color: #1565c0;
     }
-    .flash {
-      opacity: 1 !important;
-      box-shadow: 0 0 25px white;
+
+    .score {
+      margin-top: 15px;
+      font-weight: bold;
     }
   </style>
 </head>
 <body>
+  <header>
+    <img src="https://thefounderhood.com/images/logo-white.svg" alt="Founderhood Logo">
+    <h1>Buzzword Blitz</h1>
+    <p>How fast can you identify Founderhood terms?</p>
+  </header>
 
-  <h1>🧠 Mind Match</h1>
-  <div id="score">Score: 0</div>
-  <div class="grid">
-    <div class="btn green" id="green"></div>
-    <div class="btn red" id="red"></div>
-    <div class="btn blue" id="blue"></div>
-    <div class="btn yellow" id="yellow"></div>
+  <div class="game-container">
+    <div class="buzzword" id="buzzword">Press Start!</div>
+    <button onclick="nextBuzzword()">Start</button>
+    <div class="score" id="score">Score: 0</div>
   </div>
-  <button id="start">Start Game</button>
 
   <script>
-    const colors = ["green", "red", "blue", "yellow"];
-    let sequence = [], userSequence = [], score = 0, clickable = false;
+    const buzzwords = [
+      'Accelerator', 'Incubator', 'Startup', 'Founder', 'Mentorship', 'Pitch Deck',
+      'Demo Day', 'Investor', 'Innovation', 'Alumni', 'Ecosystem', 'Growth',
+      'Venture Capital', 'Application', 'Evaluation', 'Track Record', 'Engagement',
+      'Data Tracking', 'Partner Network', 'Global Community'
+    ];
 
-    const scoreDisplay = document.getElementById("score");
-    const startBtn = document.getElementById("start");
+    let score = 0;
+    let index = -1;
 
-    colors.forEach(color => {
-      document.getElementById(color).addEventListener("click", () => handleClick(color));
-    });
-
-    startBtn.addEventListener("click", startGame);
-
-    function startGame() {
-      sequence = [];
-      score = 0;
-      nextRound();
-    }
-
-    function nextRound() {
-      score++;
-      scoreDisplay.textContent = "Score: " + (score - 1);
-      userSequence = [];
-      const nextColor = colors[Math.floor(Math.random() * 4)];
-      sequence.push(nextColor);
-      playSequence();
-    }
-
-    function playSequence() {
-      clickable = false;
-      let i = 0;
-      const interval = setInterval(() => {
-        flash(sequence[i]);
-        i++;
-        if (i >= sequence.length) {
-          clearInterval(interval);
-          setTimeout(() => clickable = true, 400);
-        }
-      }, 600);
-    }
-
-    function flash(color) {
-      const el = document.getElementById(color);
-      el.classList.add("flash");
-      setTimeout(() => el.classList.remove("flash"), 300);
-    }
-
-    function handleClick(color) {
-      if (!clickable) return;
-      flash(color);
-      userSequence.push(color);
-      const index = userSequence.length - 1;
-      if (userSequence[index] !== sequence[index]) {
-        gameOver();
-        return;
+    function nextBuzzword() {
+      index++;
+      if (index < buzzwords.length) {
+        document.getElementById('buzzword').textContent = buzzwords[index];
+        score += 10;
+        document.getElementById('score').textContent = `Score: ${score}`;
+      } else {
+        document.getElementById('buzzword').textContent = "You're a true Founderhood Pro!";
+        document.querySelector('button').disabled = true;
       }
-      if (userSequence.length === sequence.length) {
-        setTimeout(nextRound, 600);
-      }
-    }
-
-    function gameOver() {
-      alert("Game Over! Your Score: " + (score - 1));
-      clickable = false;
-      scoreDisplay.textContent = "Score: 0";
-      sequence = [];
     }
   </script>
 </body>
