@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Founderhood Buzzword Blitz</title>
+  <title>Founderhood Culture Quiz</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <style>
     body {
@@ -14,9 +14,8 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: flex-start;
-      min-height: 100vh;
       padding: 30px 20px;
+      min-height: 100vh;
     }
 
     header {
@@ -25,10 +24,8 @@
     }
 
     header img {
-      width: 100%;
-      max-width: 400px;
-      border-radius: 10px;
-      margin-bottom: 20px;
+      width: 100px;
+      border-radius: 50%;
     }
 
     h1 {
@@ -36,97 +33,129 @@
       font-size: 2.2rem;
     }
 
-    .game-container {
+    .quiz-container {
       background-color: white;
       padding: 30px;
       border-radius: 20px;
       box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 600px;
       text-align: center;
-      width: 90%;
-      max-width: 500px;
-      animation: popIn 1s ease-out;
     }
 
-    @keyframes popIn {
-      0% { transform: scale(0.9); opacity: 0; }
-      100% { transform: scale(1); opacity: 1; }
+    .question {
+      font-size: 1.3rem;
+      margin-bottom: 20px;
     }
 
-    .buzzword {
-      font-size: 1.7rem;
-      margin-bottom: 25px;
-      color: #0d47a1;
-      font-weight: bold;
-      min-height: 50px;
-    }
-
-    button {
-      padding: 12px 24px;
+    .options button {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
       background-color: #0d47a1;
       color: white;
       border: none;
       border-radius: 10px;
       font-size: 1rem;
       cursor: pointer;
-      transition: transform 0.2s ease;
+      transition: background 0.3s;
     }
 
-    button:hover {
+    .options button:hover {
       background-color: #1565c0;
-      transform: scale(1.05);
     }
 
-    .score {
-      margin-top: 20px;
-      font-weight: bold;
+    .result {
       font-size: 1.2rem;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+
+    footer {
+      margin-top: 40px;
+      font-size: 0.9rem;
+      color: #666;
     }
   </style>
 </head>
 <body>
   <header>
-    <img src="https://thefounderhood.com/img/branding/facebook_open%20graph_founderhood.png" alt="Founderhood Logo" />
-    <h1>Buzzword Blitz</h1>
-    <p>How fast can you spot Founderhood's hottest terms?</p>
+    <img src="https://media.licdn.com/dms/image/v2/C4E0BAQFYpyjdZ5Og-Q/company-logo_200_200/0/1630645566608/founderhood_logo?e=2147483647&v=beta&t=dSUVH4ozkUgYyR1I6aSamTaBWYR8jhs9DFO2p2PmOsc" alt="Founderhood Logo" />
+    <h1>Founderhood Culture Quiz</h1>
+    <p>Do you know what makes Founderhood thrive?</p>
   </header>
 
-  <div class="game-container">
-    <div class="buzzword" id="buzzword">Press Start to Begin</div>
-    <button onclick="nextBuzzword()">Start</button>
-    <div class="score" id="score">Score: 0</div>
+  <div class="quiz-container">
+    <div class="question" id="question">Loading...</div>
+    <div class="options" id="options"></div>
+    <div class="result" id="result"></div>
   </div>
 
+  <footer>
+    Inspired by Founderhood’s mission to empower startup ecosystems 🌱
+  </footer>
+
   <script>
-    const buzzwords = [
-      'Accelerator', 'Incubator', 'Startup', 'Founder', 'Mentorship', 'Pitch Deck',
-      'Demo Day', 'Investor', 'Innovation', 'Alumni', 'Ecosystem', 'Growth',
-      'Venture Capital', 'Application', 'Evaluation', 'Track Record', 'Engagement',
-      'Data Tracking', 'Partner Network', 'Global Community'
+    const quizData = [
+      {
+        question: "Founderhood is primarily designed to support...",
+        options: ["Job Seekers", "Startup Programs like Incubators & Accelerators", "Freelancers", "Online Stores"],
+        correct: 1
+      },
+      {
+        question: "Which of the following is a key feature of Founderhood?",
+        options: ["Food Delivery", "Weather Forecasting", "Program Management Tools", "Gaming"],
+        correct: 2
+      },
+      {
+        question: "Founderhood helps program managers by...",
+        options: ["Running ads on social media", "Organizing community events only", "Tracking and mentoring startups", "Building mobile apps"],
+        correct: 2
+      },
+      {
+        question: "True or False: Founderhood only supports local startups in London.",
+        options: ["True", "False"],
+        correct: 1
+      },
+      {
+        question: "What is one of Founderhood's missions?",
+        options: ["Accelerate human progress via innovation ecosystems", "Sell tech products", "Train influencers", "Host startup parties"],
+        correct: 0
+      }
     ];
 
+    let currentQuestion = 0;
     let score = 0;
-    let index = -1;
 
-    function nextBuzzword() {
-      index++;
-      const buzzEl = document.getElementById('buzzword');
-      const scoreEl = document.getElementById('score');
-      const button = document.querySelector('button');
+    function loadQuestion() {
+      const q = quizData[currentQuestion];
+      document.getElementById("question").textContent = q.question;
+      const optionsDiv = document.getElementById("options");
+      optionsDiv.innerHTML = "";
 
-      if (index < buzzwords.length) {
-        buzzEl.textContent = buzzwords[index];
-        buzzEl.style.animation = 'none';
-        buzzEl.offsetHeight; // restart animation
-        buzzEl.style.animation = 'popIn 0.5s ease';
-        score += 10;
-        scoreEl.textContent = `Score: ${score}`;
-        button.textContent = "Next";
+      q.options.forEach((option, index) => {
+        const btn = document.createElement("button");
+        btn.textContent = option;
+        btn.onclick = () => checkAnswer(index);
+        optionsDiv.appendChild(btn);
+      });
+    }
+
+    function checkAnswer(selected) {
+      const isCorrect = selected === quizData[currentQuestion].correct;
+      if (isCorrect) score++;
+      currentQuestion++;
+      if (currentQuestion < quizData.length) {
+        loadQuestion();
       } else {
-        buzzEl.textContent = "You nailed it! You're a Founderhood Master 💥";
-        button.disabled = true;
-        button.style.backgroundColor = '#ccc';
+        document.getElementById("question").textContent = "Quiz Complete!";
+        document.getElementById("options").innerHTML = "";
+        document.getElementById("result").textContent = `You scored ${score} out of ${quizData.length}! 🚀`;
       }
     }
+
+    window.onload = loadQuestion;
   </script>
 </body>
 </html>
