@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Mind Match</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #1e3c72, #2a5298);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      overflow: hidden;
+    }
+    h1 {
+      margin-bottom: 10px;
+      font-size: 2.5rem;
+    }
+    #score {
+      margin-bottom: 20px;
+      font-size: 1.2rem;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 120px);
+      grid-gap: 20px;
+    }
+    .btn {
+      width: 120px;
+      height: 120px;
+      border-radius: 15px;
+      cursor: pointer;
+      transition: transform 0.1s ease, opacity 0.2s;
+      opacity: 0.8;
+    }
+    .btn:active {
+      transform: scale(0.95);
+      opacity: 1;
+    }
+    .green { background: #2ecc71; }
+    .red { background: #e74c3c; }
+    .blue { background: #3498db; }
+    .yellow { background: #f1c40f; }
+    #start {
+      margin-top: 30px;
+      padding: 10px 25px;
+      font-size: 1rem;
+      background: #ffffff22;
+      border: 1px solid white;
+      border-radius: 5px;
+      color: white;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    #start:hover {
+      background: #ffffff44;
+    }
+    .flash {
+      opacity: 1 !important;
+      box-shadow: 0 0 25px white;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🧠 Mind Match</h1>
+  <div id="score">Score: 0</div>
+  <div class="grid">
+    <div class="btn green" id="green"></div>
+    <div class="btn red" id="red"></div>
+    <div class="btn blue" id="blue"></div>
+    <div class="btn yellow" id="yellow"></div>
+  </div>
+  <button id="start">Start Game</button>
+
+  <script>
+    const colors = ["green", "red", "blue", "yellow"];
+    let sequence = [], userSequence = [], score = 0, clickable = false;
+
+    const scoreDisplay = document.getElementById("score");
+    const startBtn = document.getElementById("start");
+
+    colors.forEach(color => {
+      document.getElementById(color).addEventListener("click", () => handleClick(color));
+    });
+
+    startBtn.addEventListener("click", startGame);
+
+    function startGame() {
+      sequence = [];
+      score = 0;
+      nextRound();
+    }
+
+    function nextRound() {
+      score++;
+      scoreDisplay.textContent = "Score: " + (score - 1);
+      userSequence = [];
+      const nextColor = colors[Math.floor(Math.random() * 4)];
+      sequence.push(nextColor);
+      playSequence();
+    }
+
+    function playSequence() {
+      clickable = false;
+      let i = 0;
+      const interval = setInterval(() => {
+        flash(sequence[i]);
+        i++;
+        if (i >= sequence.length) {
+          clearInterval(interval);
+          setTimeout(() => clickable = true, 400);
+        }
+      }, 600);
+    }
+
+    function flash(color) {
+      const el = document.getElementById(color);
+      el.classList.add("flash");
+      setTimeout(() => el.classList.remove("flash"), 300);
+    }
+
+    function handleClick(color) {
+      if (!clickable) return;
+      flash(color);
+      userSequence.push(color);
+      const index = userSequence.length - 1;
+      if (userSequence[index] !== sequence[index]) {
+        gameOver();
+        return;
+      }
+      if (userSequence.length === sequence.length) {
+        setTimeout(nextRound, 600);
+      }
+    }
+
+    function gameOver() {
+      alert("Game Over! Your Score: " + (score - 1));
+      clickable = false;
+      scoreDisplay.textContent = "Score: 0";
+      sequence = [];
+    }
+  </script>
+</body>
+</html>
