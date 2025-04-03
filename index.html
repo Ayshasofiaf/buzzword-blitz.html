@@ -9,50 +9,68 @@
     body {
       margin: 0;
       font-family: 'Roboto', sans-serif;
-      background: linear-gradient(135deg, #eef2f7, #d6e4f0);
+      background: linear-gradient(to bottom right, #e3f2fd, #e8eaf6);
       color: #1b1f3b;
       min-height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
 
     header {
       display: flex;
-      align-items: center;
       justify-content: space-between;
-      padding: 20px;
-      background-color: white;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      align-items: center;
+      padding: 15px 20px;
+      background-color: #ffffff;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     }
 
-    .logo-left {
+    .logo-bar {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .logo-bar img {
       height: 50px;
-      border-radius: 50%;
+      border-radius: 12px;
     }
 
-    .banner-right {
+    .banner-img {
       height: 60px;
-      border-radius: 12px;
+      border-radius: 10px;
     }
 
     .title-block {
       text-align: center;
-      margin: 20px auto;
+      padding: 30px 20px 10px;
     }
 
     .title-block h1 {
+      font-size: 2.5rem;
       color: #0d47a1;
-      font-size: 2.2rem;
-      margin-bottom: 10px;
+      margin-bottom: 0.5rem;
+    }
+
+    .title-block p {
+      font-size: 1.1rem;
+      color: #333;
     }
 
     .quiz-container {
-      background-color: white;
+      background-color: #ffffff;
+      margin: 20px auto;
       padding: 30px;
-      border-radius: 20px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      border-radius: 15px;
       width: 90%;
-      max-width: 700px;
-      margin: auto;
-      text-align: center;
+      max-width: 800px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      animation: fadeIn 0.8s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     .question {
@@ -63,15 +81,15 @@
     .options button {
       display: block;
       width: 100%;
-      padding: 12px;
       margin: 10px 0;
-      background-color: #0d47a1;
-      color: white;
-      border: none;
-      border-radius: 10px;
+      padding: 12px;
       font-size: 1rem;
+      background-color: #0d47a1;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
       cursor: pointer;
-      transition: all 0.3s;
+      transition: background 0.3s, transform 0.2s;
     }
 
     .options button:hover {
@@ -81,13 +99,13 @@
 
     .result {
       font-size: 1.3rem;
+      margin-top: 25px;
       font-weight: bold;
-      margin-top: 20px;
     }
 
     footer {
-      margin: 40px auto;
       text-align: center;
+      margin: 40px 0;
       font-size: 0.9rem;
       color: #666;
     }
@@ -95,76 +113,69 @@
 </head>
 <body>
   <header>
-    <img class="logo-left" src="https://media.licdn.com/dms/image/v2/C4E0BAQFYpyjdZ5Og-Q/company-logo_200_200/0/1630645566608/founderhood_logo?e=2147483647&v=beta&t=dSUVH4ozkUgYyR1I6aSamTaBWYR8jhs9DFO2p2PmOsc" alt="Founderhood Icon" />
-    <img class="banner-right" src="https://thefounderhood.com/img/branding/facebook_open%20graph_founderhood.png" alt="Founderhood Banner" />
+    <div class="logo-bar">
+      <img src="https://media.licdn.com/dms/image/v2/C4E0BAQFYpyjdZ5Og-Q/company-logo_200_200/0/1630645566608/founderhood_logo?e=2147483647&v=beta&t=dSUVH4ozkUgYyR1I6aSamTaBWYR8jhs9DFO2p2PmOsc" alt="LinkedIn Logo">
+      <img src="https://image.pitchbook.com/iugZr4vR1Rq7Z6bnLZTdt0JDrV11669897160015_200x200" alt="Pitchbook Logo">
+    </div>
+    <img class="banner-img" src="https://thefounderhood.com/img/branding/facebook_open%20graph_founderhood.png" alt="Founderhood Banner">
   </header>
 
   <div class="title-block">
     <h1>Founderhood Culture Quiz</h1>
-    <p>Test your knowledge of the values, vision, and vibe of Founderhood 🚀</p>
+    <p>Can you master the values and culture behind the startup accelerator world?</p>
   </div>
 
   <div class="quiz-container">
-    <div class="question" id="question">Loading...</div>
+    <div class="question" id="question">Loading question...</div>
     <div class="options" id="options"></div>
     <div class="result" id="result"></div>
   </div>
 
   <footer>
-    This quiz is unofficial and inspired by the mission of Founderhood.
+    Learn and play — discover Founderhood through this fun and informative quiz.
   </footer>
 
   <script>
     const quizData = [
       {
-        question: "Founderhood is primarily designed to support...",
-        options: ["Job Seekers", "Startup Programs like Incubators & Accelerators", "Freelancers", "Online Stores"],
+        question: "What does Founderhood mainly focus on?",
+        options: ["Food Tech", "Startup Incubation Programs", "Freelance Jobs", "Online Learning"],
         correct: 1
       },
       {
-        question: "Which of the following is a key feature of Founderhood?",
-        options: ["Food Delivery", "Weather Forecasting", "Program Management Tools", "Gaming"],
-        correct: 2
-      },
-      {
-        question: "Founderhood helps program managers by...",
-        options: ["Running ads", "Tracking and mentoring startups", "Selling merchandise", "Building mobile games"],
-        correct: 1
-      },
-      {
-        question: "True or False: Founderhood only supports local startups in London.",
+        question: "True or False: Founderhood supports only London startups.",
         options: ["True", "False"],
         correct: 1
       },
       {
-        question: "What is one of Founderhood's missions?",
-        options: ["Accelerate human progress via innovation ecosystems", "Sell tech products", "Train influencers", "Host startup parties"],
-        correct: 0
-      },
-      {
-        question: "What kind of programs does Founderhood help run?",
-        options: ["Fashion Shows", "Startup Accelerators", "Crypto Wallets", "Fitness Bootcamps"],
+        question: "Which is a feature in the Founderhood platform?",
+        options: ["Music streaming", "Startup tracking and reporting", "Online delivery", "Game hosting"],
         correct: 1
       },
       {
-        question: "Founderhood's platform offers tools for...",
-        options: ["Hosting livestream concerts", "Managing and mentoring startups", "Delivering groceries", "Learning to code"],
+        question: "Which company is listed as a Founderhood partner?",
+        options: ["NASA", "Deloitte", "Apple", "Netflix"],
         correct: 1
       },
       {
-        question: "Which company is NOT mentioned as a Founderhood partner?",
-        options: ["Deloitte", "Startup Greece", "NASA", "Chivas Ventures"],
-        correct: 2
-      },
-      {
-        question: "One benefit of using Founderhood is...",
-        options: ["Getting free gadgets", "Building a startup network", "Creating TikTok content", "Joining gaming tournaments"],
+        question: "What kind of tools does Founderhood offer?",
+        options: ["Team building games", "Accelerator management dashboards", "Video editing software", "Travel planners"],
         correct: 1
       },
       {
-        question: "Founderhood is suitable for...",
-        options: ["Running in-person, hybrid, and virtual programs", "Building cars", "Teaching yoga", "Managing food trucks"],
-        correct: 0
+        question: "Founderhood allows organizers to...",
+        options: ["Stream movies", "Track alumni performance", "Write novels", "Host TikTok contests"],
+        correct: 1
+      },
+      {
+        question: "How does Founderhood help startups grow?",
+        options: ["By giving them viral marketing", "By providing structured programs and mentorship", "By hosting sports events", "By building games"],
+        correct: 1
+      },
+      {
+        question: "What's the vision of Founderhood?",
+        options: ["Create a music community", "Empower founders worldwide", "Sell startup swag", "Develop AI tools"],
+        correct: 1
       }
     ];
 
@@ -192,9 +203,10 @@
       if (currentQuestion < quizData.length) {
         loadQuestion();
       } else {
-        document.getElementById("question").textContent = "🎉 Quiz Complete!";
+        const msg = score > 6 ? "🔥 Amazing! You really get Founderhood!" : "👍 Good job! Now you know more!";
+        document.getElementById("question").textContent = "🎉 Quiz Finished!";
         document.getElementById("options").innerHTML = "";
-        document.getElementById("result").textContent = `You scored ${score} out of ${quizData.length}!`;
+        document.getElementById("result").textContent = `${msg} You scored ${score} out of ${quizData.length}.`;
       }
     }
 
